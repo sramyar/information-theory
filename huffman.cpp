@@ -1,17 +1,11 @@
-#include<iostream>
-#include<fstream>
-#include<map>
-#include<string>
-#include<vector>
-#include <bits/stdc++.h> 
-using namespace std;
-
+#include"util.cpp"
 
 bool compare(pair<int,vector<pair<char,string>>>& a,
                     pair<int,vector<pair<char,string>>>& b)
 {
     return a.first < b.first;
 }
+
 
 vector<pair<int,vector<pair<char,string>>>> build_list(map<char,int>& fmap)
 {
@@ -27,33 +21,6 @@ vector<pair<int,vector<pair<char,string>>>> build_list(map<char,int>& fmap)
     return ls;
     
 }
-
-
-map<char,int> build_freq(string file)
-{
-    // declare the map
-    map<char,int> fmap;
-
-    char c;
-    // loop through file
-    fstream fin("source.txt", fstream::in);
-    while(fin >> noskipws >> c){
-        if(fmap.find(c) != fmap.end()) ++fmap[c];
-        else fmap[c] = 1;
-    }
-
-    return fmap;
-}
-
-
-void print(pair<int,vector<pair<char,string>>> x){
-    cout << x.first << endl;
-    for(int i=0; i< x.second.size(); i++){
-        pair<char,string> temp = x.second[i];
-        cout << temp.first << ": " << temp.second << endl;
-    }
-}
-
 
 pair<int,vector<pair<char,string>>> merge(pair<int,vector<pair<char,string>>> p0,
                                         pair<int,vector<pair<char,string>>> p1)
@@ -73,6 +40,7 @@ void update(pair<int,vector<pair<char,string>>>& p, string x)
     }
 }
 
+
 void encode_huffman(vector<pair<int,vector<pair<char,string>>>>& v)
 {
     while (v.size() > 1){
@@ -83,6 +51,18 @@ void encode_huffman(vector<pair<int,vector<pair<char,string>>>>& v)
         v.erase(v.begin(), v.begin()+2);
         v.push_back(new_pair);
     }
+}
+
+map<char,string> huffman(vector<pair<int,vector<pair<char,string>>>> v)
+{
+    map<char,string> cmap;
+    if(v.size()==1){
+        for(auto i:v[0].second){
+            cmap[i.first] = i.second;
+        }
+    }
+
+    return cmap;
 }
 
 
@@ -97,7 +77,11 @@ int main(void)
     */
     vector<pair<int,vector<pair<char,string>>>> ls = build_list(fmap);
     encode_huffman(ls);
-    print(ls[0]);
-    cout << ls[0].second.size() << endl;
+    //print_list(ls[0]);
+    map<char,pair<double,double>> pmap = build_prob(fmap);
+    map<char,string> cmap = huffman(ls);
+    double ave =  average_len(cmap,pmap);
+    double entropy = get_entropy(pmap);
+    write_output(cmap,"source.txt","Huffman",ave,entropy);
     return 0;
 }
