@@ -77,7 +77,7 @@ int main(void)
     */
     vector<pair<int,vector<pair<char,string>>>> ls = build_list(fmap);
     encode_huffman(ls);
-    //print_list(ls[0]);
+    print_list(ls[0]);
     map<char,pair<double,double>> pmap = build_prob(fmap);
     map<char,string> cmap = huffman(ls);
     double ave =  average_len(cmap,pmap);

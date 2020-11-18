@@ -62,6 +62,7 @@ int main(void)
     map<char,string> cmap = SFE_encode(pmap);
     double ave =  average_len(cmap,pmap);
     double entropy = get_entropy(pmap);
+    print_map(cmap);
     write_output(cmap,"source.txt","SFE",ave,entropy);
-    //return 0;
+    return 0;
 }
